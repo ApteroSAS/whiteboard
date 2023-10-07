@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Whiteboard</title>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico" />
+    </head>
+
+    <body style="display: none">
+        <!---Whiteboard container -!-->
+        <div id="whiteboardContainer"></div>
+
+        <div id="whiteboardInfoContainer">
+            <p><b>Whiteboard information:</b></p>
+            <p># connected users: <i id="connectedUsersCount">0</i></p>
+            <p>Smallest screen resolution: <i id="smallestScreenResolution">Unknown.</i></p>
+            <p># msg. sent to server: <i id="messageSentCount">0</i></p>
+            <p># msg. received from server: <i id="messageReceivedCount">0</i></p>
+        </div>
+
+        <div id="shareWhiteboardDialog" class="displayNone">
+            <div class="shareWhiteboardDialogContent">
+                <button
+                    class="shareWhiteboardDialogItem"
+                    id="shareWhiteboardDialogCopyReadOnlyLink"
+                >
+                    <i class="fa fa-lock"></i>&nbsp;Share read-only link
+                </button>
+                <button
+                    class="shareWhiteboardDialogItem displayNone"
+                    id="shareWhiteboardDialogCopyReadWriteLink"
+                >
+                    <i class="fa fa-lock-open"></i>&nbsp;Share read/write link
+                </button>
+                <button class="shareWhiteboardDialogItem" id="shareWhiteboardDialogGoBack">
+                    <b>Go back to the whiteboard</b>
+                </button>
+                <p
+                    class="shareWhiteboardDialogItem displayNone"
+                    id="shareWhiteboardDialogMessage"
+                ></p>
+            </div>
+        </div>
+    </body>
+</html>

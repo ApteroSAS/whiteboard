@@ -6,7 +6,9 @@ const path = require("path");
 
 const config = {
     entry: {
-        main: ["./src/js/index.js"],
+        index: ["./src/js/index.js"],
+        light: ["./src/js/light.js"],
+        view: ["./src/js/view.js"],
         "pdf.worker": "pdfjs-dist/build/pdf.worker.entry",
     },
     output: {
@@ -51,6 +53,22 @@ const config = {
         new CopyPlugin({ patterns: [{ from: "assets", to: "" }] }),
         new HtmlWebpackPlugin({
             template: "src/index.html",
+            filename: "index.html",  // Output filename
+            chunks: ["index"],  // Linking with index.js
+            minify: false,
+            inject: true,
+        }),
+        new HtmlWebpackPlugin({
+            template: "src/light.html",
+            filename: "light.html",  // Output filename
+            chunks: ["light"],  // Linking with light.js
+            minify: false,
+            inject: true,
+        }),
+        new HtmlWebpackPlugin({
+            template: "src/view.html",
+            filename: "view.html",  // Output filename
+            chunks: ["view"],  // Linking with light.js
             minify: false,
             inject: true,
         }),

@@ -4,6 +4,7 @@ const config = require("./config/config");
 const ReadOnlyBackendService = require("./services/ReadOnlyBackendService");
 const WhiteboardInfoBackendService = require("./services/WhiteboardInfoBackendService");
 const { getSafeFilePath } = require("./utils");
+const s_whiteboard = require("./s_whiteboard");
 
 function startBackendServer(port) {
     var fs = require("fs-extra");
@@ -62,6 +63,23 @@ function startBackendServer(port) {
      * @apiExample {curl} Example usage:
      *     curl -i http://[rootUrl]/api/loadwhiteboard?wid=[MyWhiteboardId]
      */
+    app.get("/api/loadwhiteboard", function (req, res) {
+        let query = escapeAllContentStrings(req["query"]);
+        const wid = query["wid"];
+        const at = query["at"]; //accesstoken
+        if (accessToken === "" || accessToken == at) {
+            const widForData = ReadOnlyBackendService.isReadOnly(wid)
+                ? ReadOnlyBackendService.getIdFromReadOnlyId(wid)
+                : wid;
+            const ret = s_whiteboard.loadStoredData(widForData);
+            res.send(ret);
+            res.end();
+        } else {
+            res.status(401); //Unauthorized
+            res.end();
+        }
+    });
+
     app.get("/api/loadwhiteboard", function (req, res) {
         let query = escapeAllContentStrings(req["query"]);
         const wid = query["wid"];
