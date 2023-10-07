@@ -5,6 +5,7 @@ const ReadOnlyBackendService = require("./services/ReadOnlyBackendService");
 const WhiteboardInfoBackendService = require("./services/WhiteboardInfoBackendService");
 const { getSafeFilePath } = require("./utils");
 const s_whiteboard = require("./s_whiteboard");
+const whiteboardToImage = require("./services/whiteboardToImage");
 
 function startBackendServer(port) {
     var fs = require("fs-extra");
@@ -80,21 +81,38 @@ function startBackendServer(port) {
         }
     });
 
-    app.get("/api/loadwhiteboard", function (req, res) {
-        let query = escapeAllContentStrings(req["query"]);
-        const wid = query["wid"];
-        const at = query["at"]; //accesstoken
-        if (accessToken === "" || accessToken == at) {
-            const widForData = ReadOnlyBackendService.isReadOnly(wid)
-                ? ReadOnlyBackendService.getIdFromReadOnlyId(wid)
-                : wid;
-            const ret = s_whiteboard.loadStoredData(widForData);
-            res.send(ret);
-            res.end();
-        } else {
-            res.status(401); //Unauthorized
-            res.end();
+    /**
+     * @api {get} /api/whiteboard.jpg Get Whiteboard as Image
+     */
+    app.get('/api/whiteboard.jpg', (req, res) => {
+        // Extract whiteboard ID, width and height from query params
+        const { whiteboardid: whiteboardId, width, height,x,y } = req.query;
+
+        if (!whiteboardId) {
+            res.status(400).send('Whiteboard ID is required!');
+            return;
         }
+
+        let imgWidth = parseInt(width, 10);
+        let imgHeight = parseInt(height, 10);
+        let imgX = parseInt(x, 10);
+        let imgY = parseInt(y, 10);
+
+        if (isNaN(imgWidth) || isNaN(imgHeight)) {
+            imgHeight = 720;
+            imgWidth = 1280;
+        }
+
+        if (isNaN(imgX) || isNaN(imgY)) {
+            imgX = 0;
+            imgY = 0;
+        }
+        whiteboardToImage(whiteboardId,imgX,imgY,imgWidth, imgHeight).then(imageBuffer => {
+            res.type('jpg').send(imageBuffer);
+        }).catch(err => {
+            console.error(err);
+            res.status(500).send('Error generating image!');
+        });
     });
 
     /**

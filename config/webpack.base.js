@@ -9,6 +9,7 @@ const config = {
         index: ["./src/js/index.js"],
         light: ["./src/js/light.js"],
         view: ["./src/js/view.js"],
+        render: ["./src/js/render.js"],
         "pdf.worker": "pdfjs-dist/build/pdf.worker.entry",
     },
     output: {
@@ -69,6 +70,13 @@ const config = {
             template: "src/view.html",
             filename: "view.html",  // Output filename
             chunks: ["view"],  // Linking with light.js
+            minify: false,
+            inject: true,
+        }),
+        new HtmlWebpackPlugin({
+            template: "src/render.html",
+            filename: "render.html",  // Output filename
+            chunks: ["render"],  // Linking with light.js
             minify: false,
             inject: true,
         }),

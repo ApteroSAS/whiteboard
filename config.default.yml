@@ -38,7 +38,7 @@ frontend:
   drawBackgroundGrid: false
 
   # Background Image; Can be "bg_grid.png", "bg_dots.png" or "bg_white.png" (Place your background at assets/images if you want your own background)  -- string
-  backgroundGridImage: "bg_grid.png"
+  backgroundGridImage: "bg_white.png"
 
   # Frontend performance tweaks
   performance:
