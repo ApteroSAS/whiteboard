@@ -5,7 +5,13 @@ function whiteboardToImage(whiteboardId,x,y, width, height) {
         let browser;
         try {
             // Launch Puppeteer, set the viewport size, and render the HTML
-            browser = await puppeteer.launch({headless: "new"});
+            browser = await puppeteer.launch({headless: "new",
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--single-process'
+                ]});
             const page = await browser.newPage();
             await page.setBypassCSP(true);
             await page.goto(`http://localhost:8080/view.html?whiteboardid=${whiteboardId}`, {
